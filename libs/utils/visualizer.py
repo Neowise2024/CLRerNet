@@ -49,6 +49,9 @@ def visualize_lanes(
     Returns:
         dst (np.ndarray): Output image.
     """
+    import os
+    from datetime import datetime
+
     dst = copy.deepcopy(src)
     for anno in annos:
         dst = draw_lane(anno, dst, dst.shape, width=4, color=GT_COLOR)
@@ -61,6 +64,21 @@ def visualize_lanes(
         dst = draw_lane(pred, dst, dst.shape, width=4, color=color)
     if concat_src:
         dst = np.concatenate((src, dst), axis=0)
+    
+    # temp 폴더 생성
+    temp_dir = 'temp'
+    os.makedirs(temp_dir, exist_ok=True)
+    
+    # 현재 날짜와 시간을 파일명에 포함
+    now = datetime.now()
+    filename = f"{now.strftime('%Y%m%d_%H%M%S')}.jpg"
+    temp_save_path = os.path.join(temp_dir, filename)
+    
+    # save_path가 있으면 원본 경로에도 저장
     if save_path:
         cv2.imwrite(save_path, dst)
+    
+    # temp 폴더에는 항상 저장
+    cv2.imwrite(temp_save_path, dst)
+        
     return dst

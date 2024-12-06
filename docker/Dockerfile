@@ -6,6 +6,10 @@ RUN apt-get update && \
     sudo git zip curl \
     libopencv-dev libffi-dev liblapack-dev libsqlite3-dev \
     build-essential libssl-dev libbz2-dev libreadline-dev \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libgtk2.0-dev \
+    pkg-config \
     ssh-client wget vim python3-opencv &&\
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
@@ -60,5 +64,6 @@ ENV PYTHONPATH $PYTHONPATH:/work
 ENV PYTHONPATH $PYTHONPATH:/home/docker/
 
 WORKDIR /work
+COPY configs/clrernet/culane/clrernet_culane_dla34_ema.pth /work/configs/clrernet/culane/clrernet_culane_dla34_ema.pth
 
 ENTRYPOINT ["/bin/bash"]

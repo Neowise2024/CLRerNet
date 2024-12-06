@@ -10,26 +10,28 @@ from libs.datasets.pipelines import Compose
 from libs.datasets.metrics.culane_metric import interp
 
 
-def inference_one_image(model, img_path):
+def inference_one_image(model, img):
     """Inference on an image with the detector.
     Args:
         model (nn.Module): The loaded detector.
-        img_path (str): Image path.
+        img (np.ndarray): Image data.
     Returns:
         img (np.ndarray): Image data with shape (width, height, channel).
         preds (List[np.ndarray]): Detected lanes.
     """
-    img = cv2.imread(img_path)
+    # 입력 이미지를 CLRerNet이 예상하는 크기로 리사이즈
+    img = cv2.resize(img, (1640, 590))
     ori_shape = img.shape
+    
     data = dict(
-        filename=img_path,
-        sub_img_name=None,
         img=img,
-        gt_points=[],
-        id_classes=[],
-        id_instances=[],
         img_shape=ori_shape,
         ori_shape=ori_shape,
+        filename=None,
+        sub_img_name=None,
+        gt_points=[],  # 빈 리스트로 초기화
+        id_classes=[],  # 빈 리스트로 초기화
+        id_instances=[],  # 빈 리스트로 초기화
     )
 
     cfg = model.cfg
